@@ -1,0 +1,18 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  tags: ["tag1", "tag2"]
+  fields:
+    apache: true
+  paths:
+    - /Users/liuxg/data/beats/apache_logs
+
+processors:
+  - drop_fields:
+      fields: ["ecs"]
+ 
+cloud.id: "${CLOUD_ID}"
+cloud.auth: "elastic:${CLOUD_PWD}"
+
+output.elasticsearch:
+  pipeline: my_pipeline_id

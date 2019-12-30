@@ -1,0 +1,8 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /Users/liuxg/data/apache_logs
+ 
+output.logstash:
+  hosts: ["localhost:5044"]

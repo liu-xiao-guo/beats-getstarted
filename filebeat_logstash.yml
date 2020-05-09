@@ -2,7 +2,7 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /Users/liuxg/data/apache_logs
+    - /Users/liuxg/demos/beats/beats-getstarted/weblog-sample.log
  
 output.logstash:
   hosts: ["localhost:5044"]

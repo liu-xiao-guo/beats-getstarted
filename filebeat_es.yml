@@ -5,14 +5,53 @@ filebeat.inputs:
   fields:
     apache: true
   paths:
-    - /Users/liuxg/data/beats/apache_logs
+    - /Users/liuxg/demos/beats/beats-getstarted/apache_logs
 
 processors:
-  - drop_fields:
-      fields: ["ecs"]
- 
-cloud.id: "${CLOUD_ID}"
-cloud.auth: "elastic:${CLOUD_PWD}"
+  - add_host_metadata:
+      netinfo.enabled: true
+      geo: # These Geo configurations are optional
+        location: 39.931854, 116.470528
+        continent_name: Asia
+        country_iso_code: CN
+        region_name: Beijing
+        region_iso_code: CN-BJ
+        city_name: Beijing city
+        name: myLocation
+  - add_cloud_metadata: ~ 
+  - add_fields: 
+      when.network.source.ip: private 
+      fields: 
+        source.geo.location: 
+          lat: 39.931854 
+          lon: 116.470528
+        source.geo.continent_name: Asia
+        source.geo.country_iso_code: CN
+        source.geo.region_name: Beijing
+        source.geo.region_iso_code: CN-BJ
+        source.geo.city_name: Beijing city
+        source.geo.name: myLocation
+      target: '' 
+  - add_fields: 
+      when.network.destination.ip: private 
+      fields: 
+        destination.geo.location: 
+          lat: 39.931854 
+          lon: 116.470528 
+        destination.geo.continent_name: Asia
+        destination.geo.country_iso_code: CN
+        destination.geo.region_name: Beijing
+        destination.geo.region_iso_code: CN-BJ
+        destination.geo.city_name: Beijing city
+        destination.geo.name: myLocation
+      target: ''
+
+# cloud.id: "${CLOUD_ID}"
+# cloud.auth: "elastic:${CLOUD_PWD}"
 
 output.elasticsearch:
+  hosts: ["${ES_HOST}"]
+  username: "${ES_USER}"
+  password: "${ES_PWD}"
   pipeline: my_pipeline_id
+  # index: my_log_index
